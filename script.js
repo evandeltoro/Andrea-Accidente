@@ -24,45 +24,33 @@ document.querySelectorAll('.faq-item').forEach((item) => {
   });
 });
 
-// Contact form — submits to Formspree, shows inline success/error message
+// Contact form — submits natively to Formspree (CORS blocks fetch/AJAX on
+// their free no-signup endpoint), then shows a success message when the
+// visitor is redirected back here after submitting.
 const form = document.getElementById('contact-form');
+const isSpanish = document.documentElement.lang === 'es';
+
 if (form) {
-  const isSpanish = document.documentElement.lang === 'es';
+  // Just show a "sending" state; let the browser do a normal form POST.
+  form.addEventListener('submit', () => {
+    const submitBtn = form.querySelector('button[type="submit"]');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = isSpanish ? 'Enviando…' : 'Sending…';
+    }
+  });
+}
+
+// If we've just been redirected back from Formspree, show the success message
+if (new URLSearchParams(window.location.search).get('submitted') === '1') {
   const successMsg = isSpanish
     ? '<p class="form-success">Gracias — tu solicitud de revisión de caso ha sido enviada. Nuestro equipo se pondrá en contacto contigo pronto.</p>'
     : '<p class="form-success">Thank you — your case review request has been submitted. Our team will reach out shortly.</p>';
-  const errorMsg = isSpanish
-    ? 'Hubo un problema al enviar el formulario. Por favor intenta de nuevo o llámanos directamente.'
-    : 'Something went wrong submitting the form. Please try again or call us directly.';
-  const sendingText = isSpanish ? 'Enviando…' : 'Sending…';
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const submitBtn = form.querySelector('button[type="submit"]');
-    const originalBtnText = submitBtn.textContent;
-    submitBtn.disabled = true;
-    submitBtn.textContent = sendingText;
-
-    try {
-      const response = await fetch(form.action, {
-        method: 'POST',
-        body: new FormData(form),
-        headers: { 'Accept': 'application/json' }
-      });
-
-      if (response.ok) {
-        form.innerHTML = successMsg;
-      } else {
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalBtnText;
-        alert(errorMsg);
-      }
-    } catch (err) {
-      submitBtn.disabled = false;
-      submitBtn.textContent = originalBtnText;
-      alert(errorMsg);
-    }
-  });
+  const formEl = document.getElementById('contact-form');
+  if (formEl) formEl.innerHTML = successMsg;
+  // Clean the URL so refreshing doesn't re-show the message
+  const cleanUrl = window.location.pathname + window.location.hash;
+  window.history.replaceState({}, document.title, cleanUrl);
 }
 
 // Nav background on scroll
