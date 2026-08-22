@@ -423,6 +423,14 @@ h1, h2, h3 { font-family: var(--display); font-weight: 600; line-height: 1.1; le
   outline-offset: 1px;
 }
 .form-disclaimer { font-size: 12px; color: var(--ink-soft); margin-top: 14px; font-weight: 400; }
+.form-success {
+  text-align: center;
+  padding: 24px 0;
+  font-family: var(--display);
+  font-size: 18px;
+  color: var(--ink);
+  line-height: 1.5;
+}
 
 /* ===== FOOTER ===== */
 .footer { background: #0B1220; color: rgba(255,255,255,0.7); }

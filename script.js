@@ -24,13 +24,44 @@ document.querySelectorAll('.faq-item').forEach((item) => {
   });
 });
 
-// Contact form (placeholder submit handler — wire to real backend/email service later)
+// Contact form — submits to Formspree, shows inline success/error message
 const form = document.getElementById('contact-form');
 if (form) {
-  form.addEventListener('submit', (e) => {
+  const isSpanish = document.documentElement.lang === 'es';
+  const successMsg = isSpanish
+    ? '<p class="form-success">Gracias — tu solicitud de revisión de caso ha sido enviada. Nuestro equipo se pondrá en contacto contigo pronto.</p>'
+    : '<p class="form-success">Thank you — your case review request has been submitted. Our team will reach out shortly.</p>';
+  const errorMsg = isSpanish
+    ? 'Hubo un problema al enviar el formulario. Por favor intenta de nuevo o llámanos directamente.'
+    : 'Something went wrong submitting the form. Please try again or call us directly.';
+  const sendingText = isSpanish ? 'Enviando…' : 'Sending…';
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    alert('Thanks — this form is a placeholder. Connect it to an email/CRM service to go live.');
-    form.reset();
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = sendingText;
+
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (response.ok) {
+        form.innerHTML = successMsg;
+      } else {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
+        alert(errorMsg);
+      }
+    } catch (err) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalBtnText;
+      alert(errorMsg);
+    }
   });
 }
 
