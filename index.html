@@ -260,7 +260,7 @@
       <input type="hidden" name="_subject" value="Nueva Revisión de Caso — Andrea Accident (sitio en español)" />
       <input type="hidden" name="site" value="andreaaccidente.com" />
       <label>Nombre Completo<input type="text" name="name" required /></label>
-      <label>Número de Teléfono<input type="tel" name="phone" required /></label>
+      <label>Número de Teléfono<input type="tel" name="phone" required pattern="^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$" title="Por favor ingresa un número de teléfono válido de 10 dígitos" placeholder="(832) 322-8963" /></label>
       <label>Correo Electrónico<input type="email" name="email" required /></label>
       <label>Tipo de Caso
         <select name="case_type" required>
