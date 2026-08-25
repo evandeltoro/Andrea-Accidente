@@ -210,7 +210,8 @@ h1, h2, h3 { font-family: var(--display); font-weight: 600; line-height: 1.1; le
 .results { background: var(--fog); }
 .results-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 260px));
+  justify-content: center;
   gap: 20px;
   margin-top: 40px;
 }
