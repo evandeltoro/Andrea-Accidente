@@ -37,8 +37,27 @@ if (form) {
     : 'Something went wrong submitting the form. Please try again or call us directly.';
   const sendingText = isSpanish ? 'Enviando…' : 'Sending…';
 
+  const invalidPhoneMsg = isSpanish
+    ? 'Por favor ingresa un número de teléfono válido de 10 dígitos.'
+    : 'Please enter a valid 10-digit phone number.';
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
+
+    // Validate phone has exactly 10 digits (ignoring formatting characters)
+    const phoneInput = form.querySelector('input[name="phone"]');
+    const digitsOnly = phoneInput.value.replace(/\D/g, '');
+    if (digitsOnly.length !== 10) {
+      phoneInput.setCustomValidity(invalidPhoneMsg);
+      form.reportValidity();
+      phoneInput.addEventListener('input', function clearCustom() {
+        phoneInput.setCustomValidity('');
+        phoneInput.removeEventListener('input', clearCustom);
+      });
+      return;
+    }
+    phoneInput.setCustomValidity('');
+
     const submitBtn = form.querySelector('button[type="submit"]');
     const originalBtnText = submitBtn.textContent;
     submitBtn.disabled = true;
