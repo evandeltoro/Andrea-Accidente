@@ -482,6 +482,26 @@ h1, h2, h3 { font-family: var(--display); font-weight: 600; line-height: 1.1; le
 }
 .footer-logo .logo-text .logo-accent { color: var(--amber); }
 .footer-grid p { max-width: 320px; font-size: 14px; }
+.footer-social {
+  display: flex;
+  gap: 14px;
+  margin-top: 16px;
+}
+.footer-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.7);
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.footer-social a:hover {
+  color: var(--amber);
+  border-color: var(--amber);
+}
 .footer-links { display: flex; gap: 24px; flex-wrap: wrap; align-self: flex-start; }
 .footer-links a { font-size: 14px; }
 .footer-links a:hover { color: #fff; }
